@@ -1,0 +1,36 @@
+.leading {
+  background-color: dodgerblue;
+}
+
+.trailing {
+  background-color: tomato;
+}
+
+.zero {
+  background-color: grey;
+}
+
+html, body {
+  height:100%;
+}
+
+.parallax {
+  /* The image used */
+  background-image: url("..\..\assets\beat saber.jpg");
+
+  /* Set a specific height */
+  /*height: 500px;*/
+  /*height: 1400px;*/
+  height: 50vh;
+
+  /* Create the parallax scrolling effect */
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.table {
+  border-collapse: separate;
+  border-spacing: 5px;
+}

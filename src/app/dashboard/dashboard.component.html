@@ -1,0 +1,360 @@
+<div class="card">
+  <div class="card-body">
+    <button type="button" class="btn btn-primary" onclick='window.location.href="../old";'>Scoresaber Friends v1.0</button>
+    &nbsp;
+    <button type="button" class="btn btn-primary btn-lg" (click) = "updateData()">Update Data</button>
+    &nbsp;
+    <button type="button" class="btn btn-danger btn-sm" (click) = "updateAllData()">Update ALL Data. Please don't press this unless you REALLY need to. ( You probably don't!)</button>
+  </div>
+</div>
+<br>
+
+
+
+<p-accordion [multiple]="true">
+  <p-accordionTab header="Versus" [selected]="true">
+    <div class="p-grid">
+      <div class="p-col-12 p-md-6 p-lg-4">
+        <p-card header="All High Scores">
+          <p-table [value]="latestScoresCompared" [scrollable]="true" scrollHeight="300px">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Song</th>
+                <th style="width:100px">Score Iggy</th>
+                <th style="width:100px">Score JP</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-scoreIterator>
+              <tr [ngClass]="{
+                'leadingIggy' : scoreIterator.scoresIggy.scores[0].score > scoreIterator.scoresJP.scores[0].score,
+                'trailingIggy' : scoreIterator.scoresIggy.scores[0].score < scoreIterator.scoresJP.scores[0].score
+              }">
+                <td>{{scoreIterator.song}}</td>
+                <td style="width:100px">{{scoreIterator.scoresIggy.scores[0].score}}</td>
+                <td style="width:100px">{{scoreIterator.scoresJP.scores[0].score}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-card>
+      </div>
+
+
+      <div class="p-col-12 p-md-12 p-lg-8">
+        <p-card header="Fuckin charts, bitcheeeees!">
+          <div class="p-grid">
+            <div class="p-col-12 p-md-6 p-lg-4">
+              <p-table selectionMode="single" [(selection)]="idOfSongToDisplayInGraph" (onRowSelect)="onRowSelect($event)" [value]="scoresComparedWithMultipleEntries" [scrollable]="true" scrollHeight="300px">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>Song</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-scoreIterator>
+                  <tr [pSelectableRow]="scoreIterator">
+                    <td>{{scoreIterator.song}}</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-8">
+              <canvas id="comparisonChartIdentifier">{{ comparisonChart }}</canvas>
+            </div>
+          </div>
+        </p-card>
+      </div>
+
+    </div>
+  </p-accordionTab>
+
+
+  <p-accordionTab header="JP & Babsi">
+    <div class="p-grid">
+      <div class="p-col-12 p-md-6 p-lg-4">
+        <p-card header="Newest Scores">
+          <div>
+            <p-table [value]="newestScoresJP.scores.slice(0, 10)" [scrollable]="true" scrollHeight="200px">
+              <ng-template pTemplate="header">
+                  <tr>
+                    <th>Song</th>
+                    <th style="width:100px">Score</th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-scoreIterator>
+                  <tr>
+                      <td>{{scoreIterator.song}}</td>
+                      <td style="width:100px">{{scoreIterator.score}}</td>
+                  </tr>
+              </ng-template>
+          </p-table>
+          </div>
+        </p-card>
+      </div>
+      <div class="p-col-12 p-md-6 p-lg-4">
+        <p-card header="Highest Point-Scores">
+          <div>
+            <p-table [value]="topTenPointsJP.scores.slice(0, 10)" [scrollable]="true" scrollHeight="200px">
+              <ng-template pTemplate="header">
+                  <tr>
+                      <th>Song</th>
+                      <th style="width:100px">Score</th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-scoreIterator>
+                  <tr>
+                      <td>{{scoreIterator.song}}</td>
+                      <td style="width:100px">{{scoreIterator.score}}</td>
+                  </tr>
+              </ng-template>
+          </p-table>
+          </div>
+        </p-card>
+      </div>
+      <div class="p-col-12 p-md-6 p-lg-4">
+        <p-card header="Highest Percent-Scores">
+          <div>
+            <p-table [value]="topTenPercentJP.scores.slice(0, 10)" [scrollable]="true" scrollHeight="200px">
+              <ng-template pTemplate="header">
+                  <tr>
+                      <th>Song</th>
+                      <th style="width:100px">Score</th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-scoreIterator>
+                  <tr>
+                      <td>{{scoreIterator.song}}</td>
+                      <td style="width:100px">{{scoreIterator.score}}</td>
+                  </tr>
+              </ng-template>
+          </p-table>
+          </div>
+        </p-card>
+      </div>
+      <!--
+      <div class="p-col-12 p-md-6 p-lg-4">
+        <p-card header="Closest Lead (Points)">
+          <div>
+            <p-table [value]="closestLeadPointsJP.scores" [scrollable]="true" scrollHeight="200px">
+              <ng-template pTemplate="header">
+                  <tr>
+                      <th>Song</th>
+                      <th style="width:100px">Score</th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-scoreIterator>
+                  <tr>
+                      <td>{{scoreIterator.song}}</td>
+                      <td style="width:100px">{{scoreIterator.score}}</td>
+                  </tr>
+              </ng-template>
+          </p-table>
+          </div>
+        </p-card>
+      </div>
+      <div class="p-col-12 p-md-6 p-lg-4">
+        <p-card header="Closest Lead (Percent)">
+          <div>
+            <p-table [value]="closestLeadPercentJP.scores" [scrollable]="true" scrollHeight="200px">
+              <ng-template pTemplate="header">
+                  <tr>
+                      <th>Song</th>
+                      <th style="width:100px">Score</th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-scoreIterator>
+                  <tr>
+                      <td>{{scoreIterator.song}}</td>
+                      <td style="width:100px">{{scoreIterator.score}}</td>
+                  </tr>
+              </ng-template>
+          </p-table>
+          </div>
+        </p-card>
+      </div>
+    -->
+    </div>
+  </p-accordionTab>
+
+
+
+
+
+  <p-accordionTab header="Iggy & Lauxpas">
+    <div class="p-grid">
+      <div class="p-col-12 p-md-6 p-lg-4">
+        <p-card header="Newest Scores">
+          <div>
+            <p-table [value]="newestScoresIggy.scores.slice(0, 10)" [scrollable]="true" scrollHeight="200px">
+              <ng-template pTemplate="header">
+                  <tr>
+                    <th>Song</th>
+                    <th style="width:100px">Score</th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-scoreIterator>
+                  <tr>
+                      <td>{{scoreIterator.song}}</td>
+                      <td style="width:100px">{{scoreIterator.score}}</td>
+                  </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </p-card>
+      </div>
+      <div class="p-col-12 p-md-6 p-lg-4">
+        <p-card header="Highest Point-Scores">
+          <div>
+            <p-table [value]="topTenPointsIggy.scores.slice(0, 10)" [scrollable]="true" scrollHeight="200px">
+              <ng-template pTemplate="header">
+                  <tr>
+                      <th>Song</th>
+                      <th style="width:100px">Score</th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-scoreIterator>
+                  <tr>
+                      <td>{{scoreIterator.song}}</td>
+                      <td style="width:100px">{{scoreIterator.score}}</td>
+                  </tr>
+              </ng-template>
+          </p-table>
+          </div>
+        </p-card>
+      </div>
+      <div class="p-col-12 p-md-6 p-lg-4">
+        <p-card header="Highest Percent-Scores">
+          <div>
+            <p-table [value]="topTenPercentIggy.scores.slice(0, 10)" [scrollable]="true" scrollHeight="200px">
+              <ng-template pTemplate="header">
+                  <tr>
+                      <th>Song</th>
+                      <th style="width:100px">Score</th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-scoreIterator>
+                  <tr>
+                      <td>{{scoreIterator.song}}</td>
+                      <td style="width:100px">{{scoreIterator.score}}</td>
+                  </tr>
+              </ng-template>
+          </p-table>
+          </div>
+        </p-card>
+      </div>
+      <div class="p-col-12 p-md-6 p-lg-4">
+
+      </div>
+      <div class="p-col-12 p-md-6 p-lg-4">
+
+      </div>
+    </div>
+
+
+
+  </p-accordionTab>
+</p-accordion>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+<div class="p-grid">
+  <div class="p-col-12 p-md-6 p-lg-4">
+    <p-card header="Highest Point-Scores JP & Babsi">
+      <div>
+        <p-table [value]="topTenPointsJP" [scrollable]="true" scrollHeight="200px">
+          <ng-template pTemplate="header">
+              <tr>
+                  <th>Song</th>
+                  <th style="width:100px">Score</th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-scoreData>
+              <tr>
+                  <td>{{allScores.song}}</td>
+                  <td style="width:100px">{{allScores.score}}</td>
+              </tr>
+          </ng-template>
+      </p-table>
+      </div>
+    </p-card>
+  </div>
+  <div class="p-col-12 p-md-6 p-lg-4">
+    <p-card header="Highest Point-Scores Iggy & Lauxpas">
+      <div>
+        <p-table [value]="topTenPointsIggy" [scrollable]="true" scrollHeight="200px">
+          <ng-template pTemplate="header">
+              <tr>
+                  <th>Song</th>
+                  <th style="width:100px">Score</th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-scoreData>
+              <tr>
+                  <td>{{scoreData.song}}</td>
+                  <td style="width:100px">{{scoreData.score}}</td>
+              </tr>
+          </ng-template>
+      </p-table>
+      </div>
+    </p-card>
+  </div>
+  <div class="p-col-12 p-md-6 p-lg-4">
+    <p-card header="Highest Percent-Scores JP & Babsi">
+      <div>
+        <p-table [value]="topTenPercentJP" [scrollable]="true" scrollHeight="200px">
+          <ng-template pTemplate="header">
+              <tr>
+                  <th>Song</th>
+                  <th style="width:100px">Score</th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-scoreData>
+              <tr>
+                  <td>{{scoreData.song}}</td>
+                  <td style="width:100px">{{scoreData.score}}</td>
+              </tr>
+          </ng-template>
+      </p-table>
+      </div>
+    </p-card>
+  </div>
+  <div class="p-col-12 p-md-6 p-lg-4">
+    <p-card header="Highest Percent-Scores Iggy & Lauxpas">
+      <div>
+        <p-table [value]="topTenPercentIggy" [scrollable]="true" scrollHeight="200px">
+          <ng-template pTemplate="header">
+              <tr>
+                  <th>Song</th>
+                  <th style="width:100px">Score</th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-scoreData>
+              <tr>
+                  <td>{{scoreData.song}}</td>
+                  <td style="width:100px">{{scoreData.score}}</td>
+              </tr>
+          </ng-template>
+      </p-table>
+      </div>
+    </p-card>
+  </div>
+</div>
+
+
+-->

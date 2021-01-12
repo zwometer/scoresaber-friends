@@ -1,0 +1,75 @@
+<h1>ScOrEsAbeR-FRienS</h1>
+
+<!--<img src="..\assets\beat saber.jpg" class="img-fluid" alt="Responsive image">-->
+
+<!--<button (click) = "updateData()">UPDATE! (well actuallyyy.... not really. heh.</button>-->
+
+<!--
+<table class="table">
+  <tr>
+    <th>Name</th>
+    <th>Song</th>
+    <th>Score</th>
+  </tr>
+  <tr *ngFor="let entry of this.scoreData">
+    <th>{{entry.name}}</th>
+    <th>{{entry.song}}</th>
+    <th>{{entry.score}}</th>
+  </tr>
+</table>
+-->
+
+<div class="parallax"></div>
+
+<div class="alert alert-danger" role="alert">
+  Maintenance Mode. Data is not automatically updated.
+</div>
+
+<!--
+<div>
+  <input type="checkbox" [(ngModel)]="displayModel.hideZeros"/> Only show scores if both teams tried the song.
+</div>
+-->
+
+<div>
+  <button type="button" class="btn btn-primary" (click) = "updateData()">update data</button>
+</div>
+
+<table class="table table-hover table-dark table-bordered">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col" (click) = "sortTable('Song')">Song</th>
+      <th scope="col" (click) = "sortTable('Iggy')">Iggy & Lauxpas</th>
+      <th scope="col" (click) = "sortTable('JP')">JP & Babsi</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let entry of this.scoreComparison">
+      <th>{{entry.song}}</th>
+      <th *ngIf="entry.iggyScore >= 100" [ngClass]="{
+        'leading' : entry.iggyScore >= entry.jpScore,
+        'trailing' : entry.iggyScore < entry.jpScore,
+        'zero' : entry.iggyScore == 0
+      }">{{entry.iggyScore}} points</th>
+
+      <th *ngIf="entry.iggyScore < 100" [ngClass]="{
+        'leading' : entry.iggyScore >= entry.jpScore,
+        'trailing' : entry.iggyScore < entry.jpScore,
+        'zero' : entry.iggyScore == 0
+      }">{{entry.iggyScore}} %</th>
+
+
+      <th *ngIf="entry.jpScore >= 100" [ngClass]="{
+        'leading' : entry.jpScore >= entry.iggyScore,
+        'trailing' : entry.jpScore < entry.iggyScore,
+        'zero' : entry.jpScore == 0
+      }">{{entry.jpScore}} points</th>
+
+      <th *ngIf="entry.jpScore < 100" [ngClass]="{
+        'leading' : entry.jpScore >= entry.iggyScore,
+        'trailing' : entry.jpScore < entry.iggyScore,
+        'zero' : entry.jpScore == 0
+      }">{{entry.jpScore}} %</th>
+    </tr>
+  </tbody>
+</table>
